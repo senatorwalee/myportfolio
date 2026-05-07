@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Backend-focused full-stack engineer portfolio featuring scalable systems, cloud delivery, and practical AI integration work."
+    />
+    <meta name="theme-color" content="#f3eee6" />
+    <meta property="og:title" content="Olawale Tijani | Backend-Focused Full-Stack Engineer" />
+    <meta
+      property="og:description"
+      content="Portfolio showcasing backend systems, microservices architecture, event-driven workflows, and AI-enabled product features."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Olawale Tijani | Backend-Focused Full-Stack Engineer" />
+    <meta
+      name="twitter:description"
+      content="Scalable backend systems, cloud deployment, and practical LLM integration work."
+    />
+    <script>
+      (() => {
+        const storageKey = 'theme-mode'
+        const root = document.documentElement
+
+        try {
+          const storedMode = localStorage.getItem(storageKey)
+          const mode = storedMode === 'light' || storedMode === 'dark' || storedMode === 'system'
+            ? storedMode
+            : 'system'
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const resolvedTheme = mode === 'system' ? (prefersDark ? 'dark' : 'light') : mode
+
+          root.dataset.themeMode = mode
+          root.dataset.theme = resolvedTheme
+        } catch {
+          root.dataset.themeMode = 'system'
+          root.dataset.theme = 'light'
+        }
+      })()
+    </script>
+    <title>Olawale Tijani | Backend-Focused Full-Stack Engineer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
