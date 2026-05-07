@@ -7,7 +7,7 @@ const STORAGE_KEY = 'theme-mode'
 const getSystemTheme = (): Exclude<ThemeMode, 'system'> =>
   window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 
-const isThemeMode = (value: string | null): value is ThemeMode =>
+const isThemeMode = (value: string | null | undefined): value is ThemeMode =>
   value === 'light' || value === 'dark' || value === 'system'
 
 const resolveTheme = (mode: ThemeMode): Exclude<ThemeMode, 'system'> =>
@@ -25,7 +25,7 @@ const getInitialMode = (): ThemeMode => {
   }
 
   const fromDocument = document.documentElement.dataset.themeMode
-  if (isThemeMode(fromDocument ?? null)) {
+  if (isThemeMode(fromDocument)) {
     return fromDocument
   }
 
