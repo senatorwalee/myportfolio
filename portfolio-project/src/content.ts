@@ -63,6 +63,8 @@ export const portfolioContent: PortfolioContent = {
         'A student social platform with a live React Native application and an evolving web experience, backed by a hybrid architecture for messaging, groups, posts, and notifications.',
       bullets: [
         'Built a hybrid backend with Spring Boot, Node.js, Socket.IO, and MongoDB to support real-time social features.',
+        'Built the production React Native (Expo) app with 45+ screens across stack, tab, and drawer navigators, covering onboarding, feeds, groups, and chat.',
+        'Used Zustand and TanStack Query with persisted offline caching, plus a custom Socket.IO hook, to keep chat, presence, and feed state fast and in sync on the client.',
         'Implemented in-memory and HTTP caching that reduced backend fetches by more than 90 percent on critical paths.',
         'Introduced DTO-based API responses that cut payload sizes by about 75 percent across search, messaging, and group endpoints.',
         'Built cross-service authentication with JWT, RSA signing, and a JWKS endpoint so Spring Boot and Node services can verify tokens consistently.',
@@ -72,6 +74,8 @@ export const portfolioContent: PortfolioContent = {
         'Java',
         'Spring Boot',
         'Node.js',
+        'React',
+        'React Native',
         'Socket.IO',
         'MongoDB',
         'JWT',
@@ -82,6 +86,39 @@ export const portfolioContent: PortfolioContent = {
         {
           label: 'Visit website',
           href: 'https://oneclassroom.co/',
+          external: true,
+        },
+      ],
+    },
+    {
+      title: 'Joblytics',
+      timeframe: 'July 2026 - Ongoing',
+      role: 'Co-Founder & Full-Stack Engineer',
+      status: 'In Progress',
+      summary:
+        'A multi-vertical field-service operations platform that lets service providers manage field employees, shift scheduling, and client-facing visit history across dedicated admin, employee, and client portals.',
+      bullets: [
+        'Built a role-based multi-portal platform (admin, employee, client) on Cloudflare Workers with Hono, D1, and R2 for a serverless, edge-deployed backend.',
+        'Designed Zod-validated DTOs and JWT auth in HttpOnly cookies, with per-provider tenancy enforced through a dedicated request header.',
+        'Built core domain services for jobs, employees, providers, and geocoded service locations, plus a notification outbox for reliable async messaging.',
+        'Built the React 19 frontend with React Router 7, TypeScript, and Tailwind CSS v4 across the admin, employee, and client portals.',
+      ],
+      stack: [
+        'Cloudflare Workers',
+        'Hono',
+        'TypeScript',
+        'D1',
+        'R2',
+        'Zod',
+        'React',
+        'React Router',
+        'Tailwind CSS',
+        'JWT',
+      ],
+      links: [
+        {
+          label: 'Visit website',
+          href: 'http://dev.frontend.joblytics.ca/login',
           external: true,
         },
       ],
@@ -109,6 +146,8 @@ export const portfolioContent: PortfolioContent = {
         'PostgreSQL',
         'MongoDB',
         'Gemini API',
+        'JUnit 5',
+        'Mockito',
       ],
       metrics: ['Event-driven recommendation workflow', 'Polyglot persistence', 'CI/CD with Docker Compose'],
     },
@@ -125,7 +164,6 @@ export const portfolioContent: PortfolioContent = {
         'Keeping AI positioning grounded in shipped integration work rather than overstated claims.',
       ],
       stack: ['LLM Integration', 'Prompt Workflows', 'Backend APIs', 'Python', 'Node.js', 'Evaluation Thinking'],
-      note: 'Replace this card with a shipped AI project before launch if possible.',
     },
   ],
   skillGroups: [
@@ -170,6 +208,20 @@ export const portfolioContent: PortfolioContent = {
       location: 'Etobicoke, ON',
     },
   ],
+  certifications: [
+    {
+      title: 'Microsoft Azure Fundamentals',
+      issuer: 'LinkedIn Learning',
+      iconId: 'microsoftazure-icon',
+      issuerIconId: 'linkedin-icon',
+    },
+    {
+      title: 'Developing Solutions for Microsoft Azure',
+      issuer: 'LinkedIn Learning',
+      iconId: 'microsoftazure-icon',
+      issuerIconId: 'linkedin-icon',
+    },
+  ],
   focusAreas: [
     {
       title: 'Backend-first AI systems',
@@ -190,20 +242,23 @@ export const portfolioContent: PortfolioContent = {
   contactLinks: [
     {
       label: 'Email',
-      value: 'hello@yourdomain.com',
-      href: 'mailto:hello@yourdomain.com',
+      value: 'contact@olawaletijani.com',
+      href: 'mailto:contact@olawaletijani.com',
+      iconId: 'mail-icon',
     },
     {
       label: 'GitHub',
-      value: 'github.com/yourhandle',
-      href: 'https://github.com/yourhandle',
+      value: 'github.com/senatorwalee',
+      href: 'https://github.com/senatorwalee',
+      iconId: 'github-icon',
     },
     {
       label: 'LinkedIn',
-      value: 'linkedin.com/in/yourhandle',
-      href: 'https://linkedin.com/in/yourhandle',
+      value: 'linkedin.com/in/olawaletijani',
+      href: 'https://www.linkedin.com/in/olawaletijani/',
+      iconId: 'linkedin-icon',
     },
   ],
   contactNote:
-    'Replace the placeholder contact details, social links, portrait, and any remaining project URLs before public launch.',
+    'These links can stay as launch placeholders until the custom email inbox is fully configured.',
 }

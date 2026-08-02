@@ -160,7 +160,7 @@ ol {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   color: var(--accent-strong);
   font-size: 0.85rem;
   font-weight: 800;
@@ -191,7 +191,7 @@ ol {
 }
 
 .hero h1 {
-  font-size: clamp(3.2rem, 7vw, 6.2rem);
+  font-size: clamp(2.85rem, 4.65vw, 4.25rem);
 }
 
 .section-heading h2,
@@ -235,6 +235,24 @@ h3 {
   }
 }
 
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes project-link-shine {
+  0%,
+  50% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+
+  85%,
+  100% {
+    transform: translateX(390%) skewX(-18deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -251,6 +269,15 @@ h3 {
 
   .reveal {
     opacity: 1;
+    transform: none;
+  }
+
+  .project-link::before,
+  .button-primary::before {
+    display: none;
+  }
+
+  .project-link:hover .project-link__arrow {
     transform: none;
   }
 }

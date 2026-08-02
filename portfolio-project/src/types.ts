@@ -9,6 +9,7 @@ export interface ContactLink {
   label: string
   value: string
   href: string
+  iconId: string
 }
 
 export interface ProjectLink {
@@ -63,6 +64,13 @@ export interface EducationItem {
   location: string
 }
 
+export interface CertificationItem {
+  title: string
+  issuer: string
+  iconId: string
+  issuerIconId: string
+}
+
 export interface FocusArea {
   title: string
   detail: string
@@ -75,6 +83,7 @@ export interface PortfolioContent {
   projects: Project[]
   skillGroups: SkillGroup[]
   education: EducationItem[]
+  certifications: CertificationItem[]
   focusAreas: FocusArea[]
   contactLinks: ContactLink[]
   contactNote: string
