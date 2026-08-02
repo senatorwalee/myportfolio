@@ -636,6 +636,10 @@
   gap: 1rem;
 }
 
+.project-header .project-timeframe {
+  margin-bottom: 0.7rem;
+}
+
 .project-media {
   overflow: hidden;
   border: 1px solid var(--border);
