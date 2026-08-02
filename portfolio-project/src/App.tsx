@@ -220,6 +220,7 @@ const TypewriterText = ({ text }: { text: string }) => {
 function App() {
   const { themeMode, setThemeMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const {
     profile,
     proofPoints,
@@ -247,6 +248,41 @@ function App() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isMenuOpen])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined
+    }
+
+    let animationFrameId: number | undefined
+
+    const updateScrollProgress = () => {
+      if (animationFrameId !== undefined) {
+        return
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
+        const nextProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0
+
+        setScrollProgress(Math.min(Math.max(nextProgress, 0), 1))
+        animationFrameId = undefined
+      })
+    }
+
+    updateScrollProgress()
+    window.addEventListener('scroll', updateScrollProgress, { passive: true })
+    window.addEventListener('resize', updateScrollProgress)
+
+    return () => {
+      window.removeEventListener('scroll', updateScrollProgress)
+      window.removeEventListener('resize', updateScrollProgress)
+
+      if (animationFrameId !== undefined) {
+        window.cancelAnimationFrame(animationFrameId)
+      }
+    }
+  }, [])
 
   const closeMenu = () => setIsMenuOpen(false)
 
@@ -298,6 +334,12 @@ function App() {
           <div className="header-actions" aria-label="Theme controls">
             <ThemeToggle value={themeMode} onChange={setThemeMode} />
           </div>
+
+          <div
+            className="scroll-progress"
+            aria-hidden="true"
+            style={{ '--scroll-progress': scrollProgress } as CSSProperties}
+          />
         </header>
 
         <main id="main-content">
