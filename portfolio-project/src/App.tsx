@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import heroGraphic from './assets/hero.png'
 import profileFull from './assets/profilepicture-full.webp'
@@ -221,7 +221,7 @@ function App() {
   const { themeMode, setThemeMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const scrollProgressRef = useRef<HTMLDivElement>(null)
   const {
     profile,
     proofPoints,
@@ -267,7 +267,10 @@ function App() {
         const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
         const nextProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0
 
-        setScrollProgress(Math.min(Math.max(nextProgress, 0), 1))
+        scrollProgressRef.current?.style.setProperty(
+          '--scroll-progress',
+          String(Math.min(Math.max(nextProgress, 0), 1)),
+        )
         animationFrameId = undefined
       })
     }
@@ -346,9 +349,9 @@ function App() {
           </div>
 
           <div
+            ref={scrollProgressRef}
             className="scroll-progress"
             aria-hidden="true"
-            style={{ '--scroll-progress': scrollProgress } as CSSProperties}
           />
         </header>
 
