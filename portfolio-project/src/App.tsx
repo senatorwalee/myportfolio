@@ -1,7 +1,8 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 
 import heroGraphic from './assets/hero.png'
-import profilePicture from './assets/profilepicture.png'
+import profileAvatar from './assets/profilepicture-avatar.webp'
+import profileFull from './assets/profilepicture-full.webp'
 import oneClassroomLanding from './assets/oneclassroompics/oneclassroom-landing.png'
 import oneClassroomFeatures from './assets/oneclassroompics/oneclassroom-features.png'
 import oneClassroomHowItWorks from './assets/oneclassroompics/oneclassroom-how-it-works.png'
@@ -220,6 +221,7 @@ const TypewriterText = ({ text }: { text: string }) => {
 function App() {
   const { themeMode, setThemeMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const {
     profile,
@@ -235,19 +237,20 @@ function App() {
   } = portfolioContent
 
   useEffect(() => {
-    if (!isMenuOpen) {
+    if (!isMenuOpen && !isProfileOpen) {
       return undefined
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsMenuOpen(false)
+        setIsProfileOpen(false)
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isMenuOpen])
+  }, [isMenuOpen, isProfileOpen])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -294,15 +297,23 @@ function App() {
 
       <div className="page-shell">
         <header className={`site-header reveal${isMenuOpen ? ' is-menu-open' : ''}`} style={revealStyle(0)}>
-          <a className="brand" href="#hero" aria-label={`${profile.name} home`}>
-            <span className="brand-mark" aria-hidden="true">
-              <img src={profilePicture} alt="" />
-            </span>
+          <div className="brand" aria-label={`${profile.name} profile`}>
+            <button
+              className="brand-mark"
+              type="button"
+              aria-label={`View larger photo of ${profile.name}`}
+              onClick={(event) => {
+                event.preventDefault()
+                setIsProfileOpen(true)
+              }}
+            >
+              <img src={profileAvatar} alt="" loading="eager" decoding="async" />
+            </button>
             <span className="brand-copy">
               <span className="brand-name">{profile.name}</span>
               <span className="brand-role">Backend-first full-stack engineer</span>
             </span>
-          </a>
+          </div>
 
           <button
             className="nav-toggle"
@@ -656,6 +667,28 @@ function App() {
           <p>{profile.name} • React, Vite, TypeScript • Built for responsiveness, accessibility, and theme flexibility.</p>
         </footer>
       </div>
+
+      {isProfileOpen ? (
+        <div
+          className="profile-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Larger photo of ${profile.name}`}
+          onClick={() => setIsProfileOpen(false)}
+        >
+          <button className="profile-lightbox__close" type="button" aria-label="Close photo">
+            &times;
+          </button>
+          <img
+            className="profile-lightbox__image"
+            src={profileFull}
+            alt={profile.name}
+            loading="lazy"
+            decoding="async"
+            onClick={(event) => event.stopPropagation()}
+          />
+        </div>
+      ) : null}
     </>
   )
 }
