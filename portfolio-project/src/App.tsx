@@ -1,7 +1,6 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 
 import heroGraphic from './assets/hero.png'
-import profileAvatar from './assets/profilepicture-avatar.webp'
 import profileFull from './assets/profilepicture-full.webp'
 import oneClassroomLanding from './assets/oneclassroompics/oneclassroom-landing.png'
 import oneClassroomFeatures from './assets/oneclassroompics/oneclassroom-features.png'
@@ -307,7 +306,7 @@ function App() {
                 setIsProfileOpen(true)
               }}
             >
-              <img src={profileAvatar} alt="" loading="eager" decoding="async" />
+              <img src={profileFull} alt="" loading="eager" decoding="async" />
             </button>
             <span className="brand-copy">
               <span className="brand-name">{profile.name}</span>
