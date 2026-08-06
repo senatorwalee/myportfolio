@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
-import heroGraphic from './assets/hero.png'
 import profileFull from './assets/profilepicture-full.webp'
 import oneClassroomLanding from './assets/oneclassroompics/oneclassroom-landing.png'
 import oneClassroomFeatures from './assets/oneclassroompics/oneclassroom-features.png'
@@ -12,6 +11,7 @@ import joblyticsSchedule from './assets/joblyticspics/joblytics-schedule.png'
 import joblyticsProviderDetail from './assets/joblyticspics/joblytics-provider-detail.png'
 import { ThemeToggle } from './components/ThemeToggle'
 import { AIFitnessArchitecture } from './components/ProjectArchitecture'
+import { SystemsSnapshot } from './components/SystemsSnapshot'
 import { portfolioContent } from './content'
 import { useTheme } from './hooks/useTheme'
 import { getTechIconId } from './techIcons'
@@ -398,8 +398,8 @@ function App() {
                   <span>Service stack</span>
                   <strong>{profile.location}</strong>
                 </div>
-                <div className="systems-panel__media">
-                  <img src={heroGraphic} alt="" />
+                <div className="systems-panel__media systems-panel__media--diagram">
+                  <SystemsSnapshot />
                 </div>
                 <div className="systems-panel__caption">
                   <strong>{profile.name}</strong>
