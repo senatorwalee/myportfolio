@@ -637,7 +637,7 @@ function App() {
                 <p className="eyebrow">Get in touch</p>
                 <h2 id="contact-title">Ready for backend-heavy product work and thoughtful engineering teams.</h2>
                 <p className="contact-copy">
-                  Reach me through LinkedIn, GitHub, or the custom email address that will be connected for launch.
+                  Reach me through LinkedIn, GitHub, or email at contact@olawaletijani.com.
                 </p>
                 <div className="hero-actions">
                   <a className="button button-primary" href="mailto:contact@olawaletijani.com">

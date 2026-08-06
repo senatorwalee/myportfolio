@@ -260,5 +260,5 @@ export const portfolioContent: PortfolioContent = {
     },
   ],
   contactNote:
-    'These links can stay as launch placeholders until the custom email inbox is fully configured.',
+    'Connect with me through any of the channels below.',
 }
