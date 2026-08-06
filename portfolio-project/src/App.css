@@ -713,16 +713,26 @@
 }
 
 .diagram-slides {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   padding: 1.15rem;
   background: var(--surface-strong);
 }
 
 .diagram-slide {
-  display: none;
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out);
 }
 
 .diagram-slide.is-active {
-  display: block;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .arch-label {
