@@ -9,6 +9,7 @@ import oneClassroomGooglePlay from './assets/oneclassroompics/oneclassroom-googl
 import joblyticsProviders from './assets/joblyticspics/joblytics-providers.png'
 import joblyticsSchedule from './assets/joblyticspics/joblytics-schedule.png'
 import joblyticsProviderDetail from './assets/joblyticspics/joblytics-provider-detail.png'
+import driveTruOrdering from './assets/drivetruagentpics/drivetruagent-ordering.png'
 import { ThemeToggle } from './components/ThemeToggle'
 import { AIFitnessArchitecture } from './components/ProjectArchitecture'
 import { DriveTruArchitecture } from './components/DriveTruArchitecture'
@@ -50,6 +51,9 @@ const joblyticsGallery = [
 const projectGalleries: Record<string, GalleryImage[]> = {
   OneClassroom: oneClassroomGallery,
   Joblytics: joblyticsGallery,
+  DriveTruAgent: [
+    { src: driveTruOrdering, alt: 'DriveTruAgent ordering screen showing a conversation about large fries, a priced order receipt, and allowed and rejected backend actions' },
+  ],
 }
 
 const Icon = ({ id }: { id: string }) => (
@@ -265,8 +269,8 @@ function App() {
                         <h4>Technology stack</h4>
                         <ul className="chip-list" aria-label={`${project.title} full technology stack`}>{project.stack.map((item) => <TechChip key={item} label={item} />)}</ul>
                         {projectGalleries[project.title] ? <ProjectGallery images={projectGalleries[project.title]} />
-                          : project.title === 'AI-Fitness Recommendation' ? <AIFitnessArchitecture />
-                          : project.title === 'DriveTruAgent' ? <DriveTruArchitecture /> : null}
+                          : project.title === 'AI-Fitness Recommendation' ? <AIFitnessArchitecture /> : null}
+                        {project.title === 'DriveTruAgent' ? <DriveTruArchitecture /> : null}
                       </div>
                     </details>
                   </div>
