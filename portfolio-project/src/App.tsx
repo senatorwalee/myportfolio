@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import profileFull from './assets/profilepicture-full.webp'
 import oneClassroomLanding from './assets/oneclassroompics/oneclassroom-landing.png'
@@ -11,23 +11,27 @@ import joblyticsSchedule from './assets/joblyticspics/joblytics-schedule.png'
 import joblyticsProviderDetail from './assets/joblyticspics/joblytics-provider-detail.png'
 import { ThemeToggle } from './components/ThemeToggle'
 import { AIFitnessArchitecture } from './components/ProjectArchitecture'
-import { SystemsSnapshot } from './components/SystemsSnapshot'
+import { DriveTruArchitecture } from './components/DriveTruArchitecture'
 import { portfolioContent } from './content'
 import { useTheme } from './hooks/useTheme'
 import { getTechIconId } from './techIcons'
 import './App.css'
 
 const navigation = [
-  { label: 'Strengths', href: '#strengths' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'Work', href: '#projects' },
+  { label: 'Approach', href: '#strengths' },
   { label: 'Skills', href: '#skills' },
-  { label: 'Education', href: '#education' },
-  { label: 'Certifications', href: '#certifications' },
   { label: 'Contact', href: '#contact' },
 ]
 
-const revealStyle = (delay: number): CSSProperties =>
-  ({ '--delay': delay } as CSSProperties)
+const projectCategories: Record<string, string> = {
+  OneClassroom: 'Social platform · Web & mobile',
+  Joblytics: 'Operations platform · SaaS',
+  'AI-Fitness Recommendation': 'Applied AI · Microservices',
+  DriveTruAgent: 'Conversational AI · Real-time voice',
+}
+
+const projectId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
 const oneClassroomGallery = [
   { src: oneClassroomLanding, alt: 'OneClassroom landing page with the campus messaging app previewed on a phone' },
@@ -47,8 +51,6 @@ const projectGalleries: Record<string, GalleryImage[]> = {
   OneClassroom: oneClassroomGallery,
   Joblytics: joblyticsGallery,
 }
-
-const fullWidthProjects = new Set(['OneClassroom', 'Joblytics', 'AI-Fitness Recommendation'])
 
 const Icon = ({ id }: { id: string }) => (
   <svg className="contact-link__icon" aria-hidden="true" focusable="false">
@@ -75,24 +77,6 @@ type GalleryImage = { src: string; alt: string }
 
 const ProjectGallery = ({ images }: { images: GalleryImage[] }) => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || images.length <= 1) {
-      return undefined
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (mediaQuery.matches || isPaused) {
-      return undefined
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % images.length)
-    }, 3000)
-
-    return () => window.clearInterval(intervalId)
-  }, [isPaused, images.length])
 
   const goToOffset = (offset: number) => {
     setActiveIndex((current) => (current + offset + images.length) % images.length)
@@ -103,10 +87,6 @@ const ProjectGallery = ({ images }: { images: GalleryImage[] }) => {
       className="project-media"
       role="region"
       aria-label="Product screenshots"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
     >
       <div className="project-media__frame">
         {images.map((image, index) => (
@@ -115,7 +95,7 @@ const ProjectGallery = ({ images }: { images: GalleryImage[] }) => {
             src={image.src}
             alt={index === activeIndex ? image.alt : ''}
             aria-hidden={index === activeIndex ? undefined : true}
-            loading={index === 0 ? 'eager' : 'lazy'}
+            loading="lazy"
             className={`project-media__slide${index === activeIndex ? ' is-active' : ''}`}
           />
         ))}
@@ -160,537 +140,182 @@ const ProjectGallery = ({ images }: { images: GalleryImage[] }) => {
   )
 }
 
-const TypewriterText = ({ text }: { text: string }) => {
-  const [visibleLength, setVisibleLength] = useState(0)
-  const [useMotion, setUseMotion] = useState(false)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      setVisibleLength(text.length)
-      return undefined
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const shouldAnimate = !mediaQuery.matches
-    setUseMotion(shouldAnimate)
-
-    if (!shouldAnimate) {
-      setVisibleLength(text.length)
-      return undefined
-    }
-
-    setVisibleLength(0)
-    let currentLength = 0
-    let intervalId: number | undefined
-    const startDelay = window.setTimeout(() => {
-      intervalId = window.setInterval(() => {
-        currentLength += 1
-        setVisibleLength(currentLength)
-
-        if (currentLength >= text.length) {
-          window.clearInterval(intervalId)
-        }
-      }, 34)
-    }, 650)
-
-    return () => {
-      window.clearTimeout(startDelay)
-      if (intervalId !== undefined) {
-        window.clearInterval(intervalId)
-      }
-    }
-  }, [text])
-
-  const visibleText = useMotion ? text.slice(0, visibleLength) : text
-  const isWriting = useMotion && visibleLength < text.length
-
-  return (
-    <p className={`hero-summary${isWriting ? ' is-writing' : ''}`} aria-label={text}>
-      <span className="typewriter-reserve" aria-hidden="true">
-        {text}
-      </span>
-      <span className="typewriter-live" aria-hidden="true">
-        {visibleText}
-        {useMotion ? <span className="typewriter-cursor" aria-hidden="true" /> : null}
-      </span>
-    </p>
-  )
-}
-
 function App() {
   const { themeMode, setThemeMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const scrollProgressRef = useRef<HTMLDivElement>(null)
+  const [activeSection, setActiveSection] = useState('')
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
   const {
-    profile,
-    proofPoints,
-    strengths,
-    projects,
-    skillGroups,
-    education,
-    certifications,
-    focusAreas,
-    contactLinks,
-    contactNote,
+    profile, proofPoints, strengths, projects, skillGroups,
+    education, certifications, focusAreas, contactLinks,
   } = portfolioContent
 
   useEffect(() => {
-    if (!isMenuOpen && !isProfileOpen) {
-      return undefined
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
+    if (!isMenuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsMenuOpen(false)
-        setIsProfileOpen(false)
+        menuButtonRef.current?.focus()
       }
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isMenuOpen, isProfileOpen])
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isMenuOpen])
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return undefined
-    }
-
-    let animationFrameId: number | undefined
-
-    const updateScrollProgress = () => {
-      if (animationFrameId !== undefined) {
-        return
-      }
-
-      animationFrameId = window.requestAnimationFrame(() => {
-        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
-        const nextProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0
-
-        scrollProgressRef.current?.style.setProperty(
-          '--scroll-progress',
-          String(Math.min(Math.max(nextProgress, 0), 1)),
-        )
-        animationFrameId = undefined
-      })
-    }
-
-    updateScrollProgress()
-    window.addEventListener('scroll', updateScrollProgress, { passive: true })
-    window.addEventListener('resize', updateScrollProgress)
-
-    return () => {
-      window.removeEventListener('scroll', updateScrollProgress)
-      window.removeEventListener('resize', updateScrollProgress)
-
-      if (animationFrameId !== undefined) {
-        window.cancelAnimationFrame(animationFrameId)
-      }
-    }
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting)
+      if (visible.length) setActiveSection(visible[0].target.id)
+    }, { rootMargin: '-15% 0px -65% 0px' })
+    for (const section of document.querySelectorAll('main > section[id]')) observer.observe(section)
+    return () => observer.disconnect()
   }, [])
 
   const closeMenu = () => setIsMenuOpen(false)
 
   return (
     <>
-      <a className="skip-link" href="#main-content">
-        Skip to content
-      </a>
-
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <div className="page-shell">
-        <header className={`site-header reveal${isMenuOpen ? ' is-menu-open' : ''}`} style={revealStyle(0)}>
-          <div className="brand" aria-label={`${profile.name} profile`}>
-            <button
-              className="brand-mark"
-              type="button"
-              aria-label={`View larger photo of ${profile.name}`}
-              onClick={(event) => {
-                event.preventDefault()
-                setIsProfileOpen(true)
-              }}
-            >
-              <img src={profileFull} alt="" loading="eager" decoding="async" />
-            </button>
+        <header className={`site-header${isMenuOpen ? ' is-menu-open' : ''}`}>
+          <a className="brand" href="#hero" onClick={closeMenu} aria-label="Olawale Tijani, home">
+            <img className="brand-avatar" src={profileFull} alt="" width="40" height="40" />
             <span className="brand-copy">
-              <span className="brand-name">{profile.name}</span>
-              <span className="brand-role">Backend-first full-stack engineer</span>
+              <strong>{profile.name}</strong>
+              <span>Software engineer</span>
             </span>
-          </div>
-
-          <button
-            className="nav-toggle"
-            type="button"
-            aria-controls="primary-navigation"
-            aria-expanded={isMenuOpen}
-            onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
-          >
-            <span className="nav-toggle__bars" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className="nav-toggle__label">Menu</span>
+          </a>
+          <button ref={menuButtonRef} className="nav-toggle" type="button"
+            aria-controls="primary-navigation" aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}>
+            {isMenuOpen ? 'Close' : 'Menu'}
           </button>
-
           <nav id="primary-navigation" className="site-nav" aria-label="Primary navigation">
-            <ul>
-              {navigation.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} onClick={closeMenu}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <ul>{navigation.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} onClick={closeMenu}
+                  aria-current={activeSection === item.href.slice(1) ? 'location' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))}</ul>
           </nav>
-
-          <div className="header-actions" aria-label="Theme controls">
-            <ThemeToggle value={themeMode} onChange={setThemeMode} />
-          </div>
-
-          <div
-            ref={scrollProgressRef}
-            className="scroll-progress"
-            aria-hidden="true"
-          />
+          <div className="header-actions"><ThemeToggle value={themeMode} onChange={setThemeMode} /></div>
         </header>
 
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <section className="section hero" id="hero" aria-labelledby="hero-title">
-            <div className="hero-copy reveal" style={revealStyle(1)}>
-              <p className="availability-banner">
-                <span aria-hidden="true" />
-                {profile.availability}
-              </p>
-              <p className="eyebrow">Backend systems, cloud delivery, and LLM-backed product features</p>
-              <h1 id="hero-title">
-                Scalable software, with the <span>backend</span> doing the heavy lifting.
-              </h1>
-              <TypewriterText text={profile.summary} />
-
+            <div className="hero-copy">
+              <p className="availability-banner"><span aria-hidden="true" />{profile.availability}</p>
+              <p className="eyebrow">Full-stack engineer · Backend focus</p>
+              <h1 id="hero-title">Reliable systems.<br /><span>Real-world products.</span></h1>
+              <p className="hero-summary">{profile.summary}</p>
               <div className="hero-actions">
-                <a className="button button-primary" href={profile.primaryCta.href}>
-                  {profile.primaryCta.label}
-                </a>
-                <a className="button button-secondary" href={profile.secondaryCta.href}>
-                  {profile.secondaryCta.label}
-                </a>
+                <a className="button button-primary" href={profile.primaryCta.href}>{profile.primaryCta.label}<span aria-hidden="true">↗</span></a>
+                <a className="button button-secondary" href={profile.secondaryCta.href}>{profile.secondaryCta.label}</a>
               </div>
-
-              <div className="hero-meta" aria-label="Profile details">
-                <span className="meta-pill">{profile.title}</span>
-                <span className="meta-pill">{profile.location}</span>
+              <div className="hero-meta"><span>{profile.location}</span><span>Java / Python / TypeScript</span></div>
+            </div>
+            <aside className="engineering-panel" aria-labelledby="engineering-panel-title">
+              <div className="engineering-panel__intro">
+                <p className="eyebrow">Engineering focus</p>
+                <h2 id="engineering-panel-title">From APIs to<br />AI workflows.</h2>
               </div>
-
-              <ul className="proof-grid" aria-label="Selected project outcomes">
-                {proofPoints.map((point, index) => (
-                  <li key={point.label} className="proof-card reveal" style={revealStyle(index + 2)}>
-                    <strong>{point.value}</strong>
-                    <span>{point.label}</span>
-                  </li>
-                ))}
+              <ul className="engineering-focus">
+                <li><Icon id="springboot-icon" /><div><h3>Backend systems</h3><p>Secure services and reliable data.</p></div></li>
+                <li><Icon id="socketdotio-icon" /><div><h3>Real-time products</h3><p>Event-driven flows and messaging.</p></div></li>
+                <li><Icon id="sparkle-icon" /><div><h3>AI engineering</h3><p>Tool calling with backend guardrails.</p></div></li>
+              </ul>
+              <a className="current-project" href="#drivetruagent"><span>Currently building</span><strong>DriveTruAgent <span aria-hidden="true">↗</span></strong></a>
+            </aside>
+            <div className="proof-strip">
+              <p className="proof-context">From OneClassroom<br /><span>A live product I built.</span></p>
+              <ul className="proof-grid" aria-label="Selected OneClassroom outcomes">
+                {proofPoints.map((point) => (<li key={point.label}><strong>{point.value}</strong><span>{point.label}</span></li>))}
               </ul>
             </div>
+          </section>
 
-            <div className="hero-visual reveal" style={revealStyle(2)} aria-hidden="true">
-              <div className="visual-panel systems-panel">
-                <div className="systems-panel__topline">
-                  <span>Service stack</span>
-                  <strong>{profile.location}</strong>
-                </div>
-                <div className="systems-panel__media systems-panel__media--diagram">
-                  <SystemsSnapshot />
-                </div>
-                <div className="systems-panel__caption">
-                  <strong>{profile.name}</strong>
-                  <span>Backend services / cloud delivery / AI integrations</span>
-                </div>
-              </div>
-
-              <div className="visual-panel architecture-panel">
-                <p className="card-kicker">Core operating lane</p>
-                <h2>Java services, secure APIs, event-driven processing.</h2>
-                <ul>
-                  <li>Spring Boot microservices</li>
-                  <li>JWT, OAuth2, RSA, JWKS</li>
-                  <li>RabbitMQ and Socket.IO flows</li>
-                  <li>AWS and VPS deployment</li>
-                </ul>
-              </div>
-
-              <div className="floating-tags">
-                <span>Spring Boot</span>
-                <span>Microservices</span>
-                <span>RabbitMQ</span>
-                <span>Gemini API</span>
-                <span>Docker</span>
-                <span>AWS</span>
-              </div>
+          <section className="section" id="projects" aria-labelledby="projects-title">
+            <div className="section-heading"><div><p className="eyebrow">01 / Selected work</p><h2 id="projects-title">Built with purpose.</h2></div>
+              <p>From a live campus community to reliable AI workflows. A selection of the products and systems I’m building.</p>
+            </div>
+            <div className="project-grid">
+              {projects.map((project, index) => (
+                <article key={project.title} id={projectId(project.title)} className="project-card">
+                  <div className="project-topline"><p>{projectCategories[project.title]}</p><span className={`status-pill${project.status === 'Live Product' ? ' status-pill--live' : ''}`}>{project.status}</span></div>
+                  {projectGalleries[project.title] ? (
+                    <div className="project-cover"><img src={projectGalleries[project.title][0].src} alt={projectGalleries[project.title][0].alt} loading="lazy" width="2976" height="1646" /></div>
+                  ) : null}
+                  <div className="project-copy">
+                    <div className="project-heading"><span className="project-index">0{index + 1}</span><h3>{project.title}</h3></div>
+                    <p className="project-role">{project.role} <span>· {project.timeframe}</span></p>
+                    <p className="project-summary">{project.summary}</p>
+                    {project.metrics ? <ul className="metric-list" aria-label={`${project.title} outcomes`}>{project.metrics.map((metric) => <li key={metric}>{metric}</li>)}</ul> : null}
+                    <ul className="chip-list project-stack" aria-label={`${project.title} primary technologies`}>{project.stack.slice(0, 4).map((item) => <TechChip key={item} label={item} />)}</ul>
+                    {project.note ? <p className="project-note">{project.note}</p> : null}
+                    <div className="project-actions">{project.links?.map((link) => (
+                      <a key={link.href} className="text-link" href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.label}<span aria-hidden="true">↗</span></a>
+                    ))}</div>
+                    <details className="case-study">
+                      <summary>Explore {project.title} case study<span className="details-indicator" aria-hidden="true">+</span></summary>
+                      <div className="case-study__body">
+                        <h4>Engineering highlights</h4>
+                        <ul className="project-bullets">{project.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
+                        <h4>Technology stack</h4>
+                        <ul className="chip-list" aria-label={`${project.title} full technology stack`}>{project.stack.map((item) => <TechChip key={item} label={item} />)}</ul>
+                        {projectGalleries[project.title] ? <ProjectGallery images={projectGalleries[project.title]} />
+                          : project.title === 'AI-Fitness Recommendation' ? <AIFitnessArchitecture />
+                          : project.title === 'DriveTruAgent' ? <DriveTruArchitecture /> : null}
+                      </div>
+                    </details>
+                  </div>
+                </article>
+              ))}
             </div>
           </section>
 
           <section className="section" id="strengths" aria-labelledby="strengths-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">What I bring</p>
-              <h2 id="strengths-title">Backend depth that still ships product.</h2>
-              <p>
-                The portfolio is intentionally positioned around system reliability, clean API design,
-                deployment maturity, and measured AI adoption.
-              </p>
-            </div>
-
-            <div className="strength-grid">
-              {strengths.map((item, index) => (
-                <article key={item.title} className="info-card reveal" style={revealStyle(index + 2)}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="section section-band" id="projects" aria-labelledby="projects-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">Selected work</p>
-              <h2 id="projects-title">Projects with clear backend and systems impact.</h2>
-              <p>
-                The first two case studies are grounded in shipped work. The AI-focused card stays explicit
-                about what is already real versus what is still being developed.
-              </p>
-            </div>
-
-            <div className="project-grid">
-              {projects.map((project, index) => (
-                <article
-                  key={project.title}
-                  className={
-                    fullWidthProjects.has(project.title)
-                      ? 'project-card project-card-featured reveal'
-                      : 'project-card reveal'
-                  }
-                  style={revealStyle(index + 2)}
-                >
-                  <div className="project-header">
-                    <div>
-                      <p className="project-timeframe">{project.timeframe}</p>
-                      <h3>{project.title}</h3>
-                      <p className="project-role">{project.role}</p>
-                    </div>
-                    <span className="status-pill">{project.status}</span>
-                  </div>
-
-                  {projectGalleries[project.title] ? (
-                    <ProjectGallery images={projectGalleries[project.title]} />
-                  ) : project.title === 'AI-Fitness Recommendation' ? (
-                    <AIFitnessArchitecture />
-                  ) : null}
-
-                  <p className="project-summary">{project.summary}</p>
-
-                  {project.metrics ? (
-                    <ul className="metric-list" aria-label={`${project.title} metrics`}>
-                      {project.metrics.map((metric) => (
-                        <li key={metric}>{metric}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-
-                  <ul className="project-bullets">
-                    {project.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-
-                  <div className="project-footer">
-                    <ul className="chip-list" aria-label={`${project.title} tech stack`}>
-                      {project.stack.map((item) => (
-                        <TechChip key={item} label={item} />
-                      ))}
-                    </ul>
-
-                    {project.links?.length ? (
-                      <div className="project-actions" aria-label={`${project.title} links`}>
-                        {project.links.map((link) => (
-                          <a
-                            key={link.href}
-                            className="project-link"
-                            href={link.href}
-                            target={link.external ? '_blank' : undefined}
-                            rel={link.external ? 'noreferrer' : undefined}
-                          >
-                            <span>{link.label}</span>
-                            <span className="project-link__arrow" aria-hidden="true">
-                              →
-                            </span>
-                          </a>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    {project.note ? <p className="project-note">{project.note}</p> : null}
-                  </div>
-                </article>
-              ))}
-            </div>
+            <div className="section-heading"><div><p className="eyebrow">02 / Engineering approach</p><h2 id="strengths-title">Built to hold up.</h2></div><p>I care about what happens after the first release: performance, reliability, and systems other engineers can work with.</p></div>
+            <div className="strength-grid">{strengths.map((item, index) => (
+              <article key={item.title} className="strength-card"><span className="item-number">0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>
+            ))}</div>
           </section>
 
           <section className="section" id="skills" aria-labelledby="skills-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">Technical toolkit</p>
-              <h2 id="skills-title">Capabilities organized around the work I want to do more of.</h2>
-              <p>
-                Backend tools come first, with frontend and AI integration included as supporting and growing
-                strengths rather than filler.
-              </p>
-            </div>
-
-            <div className="skill-grid">
-              {skillGroups.map((group, index) => (
-                <article key={group.label} className="info-card reveal" style={revealStyle(index + 2)}>
-                  <h3>{group.label}</h3>
-                  <ul className="chip-list" aria-label={group.label}>
-                    {group.skills.map((skill) => (
-                      <TechChip key={skill} label={skill} />
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
+            <div className="section-heading"><div><p className="eyebrow">03 / Technical toolkit</p><h2 id="skills-title">The tools behind the work.</h2></div><p>Backend architecture at the core, with the frontend, cloud, and AI tools to deliver a complete product.</p></div>
+            <div className="skill-grid">{skillGroups.map((group) => (
+              <article key={group.label} className="skill-card"><h3>{group.label}</h3><ul className="chip-list" aria-label={group.label}>{group.skills.map((skill) => <TechChip key={skill} label={skill} />)}</ul></article>
+            ))}</div>
           </section>
 
-          <section className="section" id="education" aria-labelledby="education-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">Education</p>
-              <h2 id="education-title">Technical training backed by business grounding.</h2>
-              <p>
-                The combination is useful in product environments where architecture quality, delivery, and
-                communication all matter.
-              </p>
-            </div>
-
-            <div className="education-grid">
-              {education.map((item, index) => (
-                <article key={item.credential} className="timeline-card reveal" style={revealStyle(index + 2)}>
-                  <p className="project-timeframe">{item.timeframe}</p>
-                  <h3>{item.institution}</h3>
-                  <p className="project-role">{item.location}</p>
-                  <p>{item.credential}</p>
-                  <p className="honors">{item.honors}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="section" id="certifications" aria-labelledby="certifications-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">Certifications</p>
-              <h2 id="certifications-title">Credentials backing the cloud and backend focus.</h2>
-              <p>
-                Verified learning paths that reinforce the Azure and cloud-delivery experience already shipped in
-                production work.
-              </p>
-            </div>
-
-            <div className="cert-grid">
-              {certifications.map((cert, index) => (
-                <article key={cert.title} className="cert-card reveal" style={revealStyle(index + 2)}>
-                  <svg className="cert-card__icon" aria-hidden="true" focusable="false">
-                    <use href={`/icons.svg#${cert.iconId}`} />
-                  </svg>
-                  <div className="cert-card__body">
-                    <h3>{cert.title}</h3>
-                    <p className="cert-card__issuer">
-                      <svg className="cert-card__issuer-icon" aria-hidden="true" focusable="false">
-                        <use href={`/icons.svg#${cert.issuerIconId}`} />
-                      </svg>
-                      {cert.issuer}
-                    </p>
-                  </div>
-                </article>
-              ))}
+          <section className="section background-section" id="education" aria-labelledby="education-title">
+            <div className="section-heading"><div><p className="eyebrow">04 / Background</p><h2 id="education-title">Technical depth.<br />Business perspective.</h2></div><p>A foundation in programming and business, supported by ongoing learning in cloud engineering.</p></div>
+            <div className="background-grid">
+              <div><h3 className="column-label">Education</h3><div className="education-list">{education.map((item) => (
+                <article key={item.credential} className="timeline-card"><p className="project-timeframe">{item.timeframe}</p><h3>{item.credential}</h3><p>{item.institution} · {item.location}</p><span className="honors">{item.honors}</span></article>
+              ))}</div></div>
+              <div id="certifications"><h3 className="column-label">Professional development</h3><div className="cert-list">{certifications.map((cert) => (
+                <article key={cert.title} className="cert-card"><Icon id={cert.iconId} /><div><h3>{cert.title}</h3><p>{cert.issuer}</p></div></article>
+              ))}</div><p className="learning-note">Course certificates from LinkedIn Learning.</p></div>
             </div>
           </section>
 
           <section className="section focus-section" aria-labelledby="focus-title">
-            <div className="section-heading reveal" style={revealStyle(1)}>
-              <p className="eyebrow">Current AI direction</p>
-              <h2 id="focus-title">Growing AI engineering depth without overstating it.</h2>
-              <p>
-                The site frames AI as a serious direction anchored in existing LLM integration work and current
-                system-building effort.
-              </p>
-            </div>
-
-            <div className="focus-grid">
-              {focusAreas.map((area, index) => (
-                <article key={area.title} className="focus-card reveal" style={revealStyle(index + 2)}>
-                  <h3>{area.title}</h3>
-                  <p>{area.detail}</p>
-                </article>
-              ))}
-            </div>
+            <div className="section-heading"><div><p className="eyebrow">05 / What’s next</p><h2 id="focus-title">Practical AI. Reliable foundations.</h2></div><p>Building toward real-time voice ordering, with clear boundaries between what the model suggests and what the backend allows.</p></div>
+            <div className="focus-grid">{focusAreas.map((area) => <article key={area.title} className="focus-card"><h3>{area.title}</h3><p>{area.detail}</p></article>)}</div>
           </section>
 
           <section className="section contact-section" id="contact" aria-labelledby="contact-title">
-            <div className="contact-panel reveal" style={revealStyle(1)}>
-              <div>
-                <p className="eyebrow">Get in touch</p>
-                <h2 id="contact-title">Ready for backend-heavy product work and thoughtful engineering teams.</h2>
-                <p className="contact-copy">
-                  Reach me through LinkedIn, GitHub, or email at contact@olawaletijani.com.
-                </p>
-                <div className="hero-actions">
-                  <a className="button button-primary" href="mailto:contact@olawaletijani.com">
-                    Email Me
-                  </a>
-                  <a className="button button-secondary" href="#hero">
-                    Back to top
-                  </a>
-                </div>
-              </div>
-
-              <div className="contact-links">
-                {contactLinks.map((link) => (
-                  <a key={link.label} className="contact-link" href={link.href} target="_blank" rel="noreferrer">
-                    <Icon id={link.iconId} />
-                    <span className="contact-link__copy">
-                      <span>{link.label}</span>
-                      <strong>{link.value}</strong>
-                    </span>
-                  </a>
-                ))}
-                <p className="contact-note">{contactNote}</p>
-              </div>
+            <div className="contact-panel"><div className="contact-intro"><p className="eyebrow">Let’s connect</p><h2 id="contact-title">Have something<br /><span>worth building?</span></h2><p className="contact-copy">I’m open to backend and full-stack engineering roles, and conversations about thoughtful products.</p><a className="button button-primary" href="mailto:contact@olawaletijani.com">Start a conversation<span aria-hidden="true">↗</span></a></div>
+              <div className="contact-links">{contactLinks.map((link) => (
+                <a key={link.label} className="contact-link" href={link.href} target={link.label === 'Email' ? undefined : '_blank'} rel={link.label === 'Email' ? undefined : 'noreferrer'}><Icon id={link.iconId} /><span className="contact-link__copy"><span>{link.label}</span><strong>{link.value}</strong></span><span aria-hidden="true">↗</span></a>
+              ))}</div>
             </div>
           </section>
         </main>
-
-        <footer className="site-footer">
-          <p>{profile.name} • React, Vite, TypeScript • Built for responsiveness, accessibility, and theme flexibility.</p>
-        </footer>
+        <footer className="site-footer"><p>© {new Date().getFullYear()} {profile.name}</p><span>{profile.location}</span><a href="#hero">Back to top ↑</a></footer>
       </div>
-
-      {isProfileOpen ? (
-        <div
-          className="profile-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Larger photo of ${profile.name}`}
-          onClick={() => setIsProfileOpen(false)}
-        >
-          <button className="profile-lightbox__close" type="button" aria-label="Close photo">
-            &times;
-          </button>
-          <img
-            className="profile-lightbox__image"
-            src={profileFull}
-            alt={profile.name}
-            loading="lazy"
-            decoding="async"
-            onClick={(event) => event.stopPropagation()}
-          />
-        </div>
-      ) : null}
     </>
   )
 }

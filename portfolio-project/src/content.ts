@@ -3,54 +3,54 @@ import type { PortfolioContent } from './types'
 export const portfolioContent: PortfolioContent = {
   profile: {
     name: 'Olawale Tijani',
-    title: 'Full-Stack Engineer With a Heavy Backend Focus',
+    title: 'Backend-focused Full-Stack Engineer',
     summary:
-      'I build scalable backend systems with Java, Spring Boot, microservices, event-driven workflows, and cloud deployment. My work centers on reliable APIs, secure service communication, and production-minded delivery, with practical LLM integration experience that is growing into a stronger AI engineering specialization.',
+      'I’m Olawale, a full-stack engineer in Ontario. I build secure APIs, real-time platforms, and practical AI features with Java, Python, and TypeScript—from the data model to deployment.',
     location: 'Ontario, Canada',
-    availability: 'Open to backend and full-stack engineering opportunities',
+    availability: 'Open to engineering opportunities',
     primaryCta: {
-      label: 'Explore Projects',
+      label: 'View selected work',
       href: '#projects',
     },
     secondaryCta: {
-      label: 'Start a Conversation',
+      label: 'Get in touch',
       href: '#contact',
     },
   },
   proofPoints: [
     {
       value: '>90%',
-      label: 'Reduction in backend fetches on critical paths',
+      label: 'Fewer backend fetches',
     },
     {
       value: '~75%',
-      label: 'Smaller API payloads through DTO-driven responses',
+      label: 'Smaller API payloads',
     },
     {
-      value: '<100ms',
-      label: 'Low-latency real-time messaging target',
+      value: '45+',
+      label: 'Mobile screens delivered',
     },
   ],
   strengths: [
     {
-      title: 'Backend architecture that scales with product growth',
+      title: 'Clear service boundaries',
       description:
-        'I design service boundaries, API contracts, and supporting infrastructure for systems that need to stay fast, secure, and maintainable as features compound.',
+        'I design APIs, data models, and service boundaries that stay maintainable as a product grows.',
     },
     {
-      title: 'Operational delivery, not just local development',
+      title: 'Delivery beyond localhost',
       description:
-        'My projects include Dockerized services, CI/CD pipelines, VPS and AWS deployment, reverse proxy setup, and production runtime management.',
+        'Docker, CI/CD, cloud and VPS deployment, and runtime management are part of how I ship software.',
     },
     {
-      title: 'Event-driven and real-time systems thinking',
+      title: 'Responsive by design',
       description:
-        'I use RabbitMQ, Socket.IO, caching, and asynchronous workflows to move work off the request path and improve throughput and responsiveness.',
+        'I use caching, messaging, and asynchronous workflows to keep slow work off the request path.',
     },
     {
-      title: 'Practical AI integration into backend services',
+      title: 'AI with guardrails',
       description:
-        'I already integrate LLM-powered features into application flows and I am building deeper depth in AI engineering before the public launch of this portfolio.',
+        'Models handle language; backend code owns business rules, validation, and an auditable record of decisions.',
     },
   ],
   projects: [
@@ -60,7 +60,7 @@ export const portfolioContent: PortfolioContent = {
       role: 'Founder & Full-Stack Engineer',
       status: 'Live Product',
       summary:
-        'A student social platform with a live React Native application and an evolving web experience, backed by a hybrid architecture for messaging, groups, posts, and notifications.',
+        'A live campus community for student feeds, groups, and real-time chat. Built across React Native and web, with a hybrid Spring Boot and Node.js backend.',
       bullets: [
         'Built a hybrid backend with Spring Boot, Node.js, Socket.IO, and MongoDB to support real-time social features.',
         'Built the production React Native (Expo) app with 45+ screens across stack, tab, and drawer navigators, covering onboarding, feeds, groups, and chat.',
@@ -81,7 +81,7 @@ export const portfolioContent: PortfolioContent = {
         'JWT',
         'Nginx',
       ],
-      metrics: ['>90% fewer backend fetches', '~75% smaller API payloads', '<100ms real-time messaging'],
+      metrics: ['>90% fewer backend fetches', '~75% smaller payloads', '45+ mobile screens'],
       links: [
         {
           label: 'Visit website',
@@ -96,7 +96,7 @@ export const portfolioContent: PortfolioContent = {
       role: 'Co-Founder & Full-Stack Engineer',
       status: 'In Progress',
       summary:
-        'A multi-vertical field-service operations platform that lets service providers manage field employees, shift scheduling, and client-facing visit history across dedicated admin, employee, and client portals.',
+        'A field-service platform for scheduling teams and tracking visits, with dedicated admin, employee, and client portals on a serverless Cloudflare backend.',
       bullets: [
         'Built a role-based multi-portal platform (admin, employee, client) on Cloudflare Workers with Hono, D1, and R2 for a serverless, edge-deployed backend.',
         'Designed Zod-validated DTOs and JWT auth in HttpOnly cookies, with per-provider tenancy enforced through a dedicated request header.',
@@ -117,7 +117,7 @@ export const portfolioContent: PortfolioContent = {
       ],
       links: [
         {
-          label: 'Visit website',
+          label: 'View development preview',
           href: 'http://dev.frontend.joblytics.ca/login',
           external: true,
         },
@@ -129,7 +129,7 @@ export const portfolioContent: PortfolioContent = {
       role: 'Full-Stack Web Developer',
       status: 'Completed Build',
       summary:
-        'A recommendation platform built on microservices and asynchronous processing, combining secure gateway patterns with LLM-backed recommendation generation.',
+        'Personalized fitness recommendations generated from workout activity. A Java microservices backend connects secure APIs, RabbitMQ events, and Google Gemini.',
       bullets: [
         'Engineered a Java 17 microservices backend with Spring Boot, Spring Cloud Gateway, Eureka, and Config Server.',
         'Secured APIs with Keycloak, OAuth2, and JWT while synchronizing users at the gateway layer.',
@@ -152,24 +152,48 @@ export const portfolioContent: PortfolioContent = {
       metrics: ['Event-driven recommendation workflow', 'Polyglot persistence', 'CI/CD with Docker Compose'],
     },
     {
-      title: 'AI Engineering Track',
-      timeframe: 'Current Focus',
-      role: 'Growing Specialization',
+      title: 'DriveTruAgent',
+      timeframe: 'Ongoing',
+      role: 'Full-Stack & AI Engineer',
       status: 'In Progress',
       summary:
-        'This slot is intentionally reserved for the deeper AI engineering work I am building now, so the launch version of the site stays honest about current depth while signaling direction clearly.',
+        'A proposed real-time voice ordering agent for drive-throughs. Natural conversation meets backend-enforced pricing, stock reservations, order confirmation, and human handoff.',
       bullets: [
-        'Expanding from LLM integration toward stronger evaluation, orchestration, and production AI backend patterns.',
-        'Preparing additional AI-forward case studies that will replace placeholders before the public launch.',
-        'Keeping AI positioning grounded in shipped integration work rather than overstated claims.',
+        'Built a Python and FastAPI backend with async SQLAlchemy, PostgreSQL, and Alembic migrations for menus, sessions, carts, and immutable order records.',
+        'Integrated the OpenAI Responses API through strict tool schemas and a policy engine that allows, rejects, confirms, or escalates proposed actions before data changes.',
+        'Protected stock with expiring reservations and database row locks, and used transactional idempotency keys to prevent repeated requests from duplicating work.',
+        'Kept pricing, combo discounts, daily specials, and session timers in backend code, with English and Canadian French menu support.',
+        'Built React and TypeScript session and staff screens with TanStack Query and API-generated types, exposing the conversation, cart, event log, and handoff context.',
+        'Added pytest integration tests against real PostgreSQL, concurrency checks, scripted agent tests, and conversation evaluation scenarios, with backend and frontend checks in GitHub Actions.',
       ],
-      stack: ['LLM Integration', 'Prompt Workflows', 'Backend APIs', 'Python', 'Node.js', 'Evaluation Thinking'],
+      stack: [
+        'Python',
+        'FastAPI',
+        'Pydantic',
+        'PostgreSQL',
+        'SQLAlchemy',
+        'Alembic',
+        'OpenAI Responses API',
+        'React',
+        'TypeScript',
+        'TanStack Query',
+        'pytest',
+        'GitHub Actions',
+      ],
+      links: [
+        {
+          label: 'View on GitHub',
+          href: 'https://github.com/senatorwalee/drivetruagent',
+          external: true,
+        },
+      ],
+      note: 'Built: text-based agent, ordering backend, and staff desk. Proposed final solution: live voice conversations with OpenAI Realtime. Voice integration and real-model evaluations are pending.',
     },
   ],
   skillGroups: [
     {
       label: 'Backend',
-      skills: ['Java', 'Spring Boot', 'Node.js', 'Express.js', 'Microservices', 'REST APIs'],
+      skills: ['Java', 'Spring Boot', 'Node.js', 'Express.js', 'Python', 'FastAPI', 'Microservices', 'REST APIs'],
     },
     {
       label: 'Databases',
@@ -189,7 +213,7 @@ export const portfolioContent: PortfolioContent = {
     },
     {
       label: 'AI Integration',
-      skills: ['LLM Integration', 'Gemini API', 'Recommendation Flows', 'Prompt Design', 'API Orchestration'],
+      skills: ['LLM Integration', 'Gemini API', 'OpenAI Responses API', 'Tool Calling', 'Policy Enforcement', 'Prompt Design', 'API Orchestration'],
     },
   ],
   education: [
@@ -226,17 +250,17 @@ export const portfolioContent: PortfolioContent = {
     {
       title: 'Backend-first AI systems',
       detail:
-        'The next layer of work is centered on production-ready AI features that fit inside reliable backend architecture, not isolated demos.',
+        'DriveTruAgent connects a conversational model to an ordering backend that owns pricing, stock, confirmation, and submission.',
     },
     {
       title: 'Evaluation and reliability',
       detail:
-        'I am focusing on how AI-assisted flows are measured, validated, and protected from low-confidence outputs before they reach users.',
+        'Scripted agent tests, real-database concurrency checks, and conversation evaluation scenarios support the ordering workflow. Real-model evaluations are the next validation step.',
     },
     {
-      title: 'Clear technical positioning',
+      title: 'Real-time voice ordering',
       detail:
-        'This site presents AI work as a real and growing specialization built on existing LLM integration experience, not inflated expertise.',
+        'The proposed final DriveTruAgent experience is a live voice conversation powered by OpenAI Realtime, connected to the existing ordering rules and staff handoff workflow. Knowledge search and tracing are also planned.',
     },
   ],
   contactLinks: [

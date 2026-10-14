@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 
 import { Icon, ArchNode, ArchConnector } from './DiagramPrimitives'
 
@@ -131,32 +131,10 @@ const diagramSlides: { label: string; content: ReactNode }[] = [
 
 const DiagramSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || diagramSlides.length <= 1) {
-      return undefined
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (mediaQuery.matches || isPaused) {
-      return undefined
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % diagramSlides.length)
-    }, 7000)
-
-    return () => window.clearInterval(intervalId)
-  }, [isPaused])
 
   return (
     <div
       className="project-media"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
     >
       <div className="diagram-slides">
         {diagramSlides.map((slide, index) => (
@@ -177,9 +155,9 @@ const DiagramSlider = () => {
             type="button"
             aria-label={`Show ${slide.label} diagram`}
             aria-current={index === activeIndex ? 'true' : undefined}
-            className={`project-media__dot${index === activeIndex ? ' is-active' : ''}`}
+            className={`diagram-selector${index === activeIndex ? ' is-active' : ''}`}
             onClick={() => setActiveIndex(index)}
-          />
+          >{slide.label}</button>
         ))}
       </div>
     </div>
