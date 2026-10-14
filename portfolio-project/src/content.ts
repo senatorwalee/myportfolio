@@ -117,8 +117,8 @@ export const portfolioContent: PortfolioContent = {
       ],
       links: [
         {
-          label: 'View development preview',
-          href: 'http://dev.frontend.joblytics.ca/login',
+          label: 'Visit website',
+          href: 'https://joblytics-frontend.pages.dev',
           external: true,
         },
       ],
