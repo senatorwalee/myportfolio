@@ -186,7 +186,7 @@ function App() {
             <img className="brand-avatar" src={profileFull} alt="" width="40" height="40" />
             <span className="brand-copy">
               <strong>{profile.name}</strong>
-              <span>Software engineer</span>
+              <span>Software &amp; Applied AI engineer</span>
             </span>
           </a>
           <button ref={menuButtonRef} className="nav-toggle" type="button"
