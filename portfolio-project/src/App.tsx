@@ -149,6 +149,7 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const photoDialogRef = useRef<HTMLDialogElement>(null)
   const {
     profile, proofPoints, strengths, projects, skillGroups,
     education, certifications, focusAreas, contactLinks,
@@ -157,7 +158,7 @@ function App() {
   useEffect(() => {
     if (!isMenuOpen) return
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && !photoDialogRef.current?.open) {
         setIsMenuOpen(false)
         menuButtonRef.current?.focus()
       }
@@ -182,13 +183,17 @@ function App() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <div className="page-shell">
         <header className={`site-header${isMenuOpen ? ' is-menu-open' : ''}`}>
-          <a className="brand" href="#hero" onClick={closeMenu} aria-label="Olawale Tijani, home">
-            <img className="brand-avatar" src={profileFull} alt="" width="40" height="40" />
-            <span className="brand-copy">
+          <div className="brand">
+            <button className="brand-photo" type="button"
+              aria-label={`View larger photo of ${profile.name}`} aria-haspopup="dialog"
+              aria-controls="profile-photo-dialog" onClick={() => photoDialogRef.current?.showModal()}>
+              <img className="brand-avatar" src={profileFull} alt="" width="40" height="40" />
+            </button>
+            <a className="brand-copy" href="#hero" onClick={closeMenu} aria-label="Olawale Tijani, home">
               <strong>{profile.name}</strong>
               <span>Software &amp; Applied AI engineer</span>
-            </span>
-          </a>
+            </a>
+          </div>
           <button ref={menuButtonRef} className="nav-toggle" type="button"
             aria-controls="primary-navigation" aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((open) => !open)}>
@@ -320,6 +325,13 @@ function App() {
         </main>
         <footer className="site-footer"><p>© {new Date().getFullYear()} {profile.name}</p><span>{profile.location}</span><a href="#hero">Back to top ↑</a></footer>
       </div>
+      <dialog id="profile-photo-dialog" ref={photoDialogRef} className="profile-dialog"
+        aria-label={`Photo of ${profile.name}`}
+        onClick={(event) => { if (event.target === event.currentTarget) photoDialogRef.current?.close() }}>
+        <button className="profile-dialog__close" type="button" autoFocus
+          onClick={() => photoDialogRef.current?.close()}>Close photo</button>
+        <img src={profileFull} alt={profile.name} width="838" height="1200" loading="lazy" />
+      </dialog>
     </>
   )
 }
